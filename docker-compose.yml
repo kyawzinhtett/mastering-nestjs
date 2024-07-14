@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  dev-db:
+    image: postgres:16.3
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nest
+    networks:
+      - nestjs
+
+  adminer:
+    image: adminer
+    ports:
+      - 8081:8080
+    networks:
+      - nestjs
+
+networks:
+  nestjs:
