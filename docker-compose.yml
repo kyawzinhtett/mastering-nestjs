@@ -10,5 +10,16 @@ services:
     networks:
       - nestjs
 
+  test-db:
+    image: postgres:16.3
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nest
+    networks:
+      - nestjs
+
 networks:
   nestjs:
