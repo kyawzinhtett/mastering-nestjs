@@ -4,6 +4,7 @@ import { AppModule } from '../src/app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from 'src/auth/dto';
+import { EditUserDto } from 'src/user/dto/edit-user.dto';
 
 describe('App E2E', () => {
   let app: INestApplication;
@@ -35,7 +36,7 @@ describe('App E2E', () => {
     await app.close();
   });
 
-  describe('Auth', () => {
+  describe('Auth Module', () => {
     const dto: AuthDto = {
       email: 'test@test.com',
       password: 'p@ssword',
@@ -106,5 +107,31 @@ describe('App E2E', () => {
     });
   });
 
-  it.todo('Should Pass!!!');
+  describe('User Module', () => {
+    const userDto: EditUserDto = {
+      email: 'test@user.com',
+      firstName: 'Test',
+    };
+
+    describe('Get me', () => {
+      it('Should get current user', () => {
+        return spec()
+          .get('/users/me')
+          .withHeaders('Authorization', 'Bearer $S{userAccessToken}')
+          .expectStatus(200);
+      });
+    });
+
+    describe('Edit user', () => {
+      it('Should edit user', () => {
+        return spec()
+          .patch('/users')
+          .withHeaders('Authorization', 'Bearer $S{userAccessToken}')
+          .withBody(userDto)
+          .expectStatus(200)
+          .expectBodyContains(userDto.email)
+          .expectBodyContains(userDto.firstName);
+      });
+    });
+  });
 });
